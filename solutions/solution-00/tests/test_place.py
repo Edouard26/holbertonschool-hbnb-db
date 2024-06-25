@@ -1,4 +1,5 @@
 from src.models.place import Place
+import unittest
 
 def test_create_place(session):
     place_data = {

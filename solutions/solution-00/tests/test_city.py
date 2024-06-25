@@ -1,5 +1,6 @@
 from src.models.city import City
 from src.models.country import Country
+import unittest
 
 def test_create_city(session):
     # Ensure necessary related records exist

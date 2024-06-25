@@ -1,4 +1,5 @@
 from src.models.amenity import Amenity
+import unittest
 
 def test_create_amenity(session):
     amenity_data = {

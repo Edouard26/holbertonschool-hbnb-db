@@ -1,4 +1,5 @@
 from src.models.user import User
+import unittest
 
 def test_create_user(session):
     user_data = {
