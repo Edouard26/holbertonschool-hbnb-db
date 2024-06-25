@@ -1,4 +1,4 @@
-from src.models.base import Base  # Your base model definition
+from src.models.base import BaseModel
 from src.persistence.repository import Repository
 from sqlalchemy.exc import SQLAlchemyError
 
