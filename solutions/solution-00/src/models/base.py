@@ -1,9 +1,9 @@
-""" Abstract base class for all models """
-
 from datetime import datetime
 from typing import Any, Optional
 import uuid
 from abc import ABC, abstractmethod
+from sqlalchemy.ext.declarative import as_declarative, declared_attr
+from sqlalchemy import Column, String, DateTime, create_engine, orm
 
 
 class Base(ABC):
@@ -93,3 +93,35 @@ class Base(ABC):
     @abstractmethod
     def update(entity_id: str, data: dict) -> Any | None:
         """Updates an object of the class"""
+
+# SQLAlchemy setup
+
+@as_declarative()
+class SQLAlchemyBase:
+    @declared_attr
+    def __tablename__(cls) -> str:
+        return cls.__name__.lower()
+
+
+class BaseModel(Base, SQLAlchemyBase):
+    """
+    Integrates the custom Base class with SQLAlchemy's declarative base
+    """
+  
+    __abstract__ = True
+
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4))
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    def __init__(
+        self,
+        id: Optional[str] = None,
+        created_at: Optional[datetime] = None,
+        updated_at: Optional[datetime] = None,
+        **kwargs,
+    ) -> None:
+        """
+        Base class constructor
+        """
+        super().__init__(id=id, created_at=created_at, updated_at=updated_at, **kwargs)
