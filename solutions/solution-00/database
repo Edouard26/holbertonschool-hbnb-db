@@ -1,0 +1,27 @@
+import os
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
+
+# Define the database URL based on the ENV variable
+DATABASE_TYPE = os.getenv('DATABASE_TYPE', 'sqlite')
+
+if DATABASE_TYPE == 'postgresql':
+    DATABASE_URL = os.getenv('DATABASE_URL', 'postgresql://user:password@localhost/mydatabase')
+else:
+    DATABASE_URL = 'sqlite:///mydatabase.db'
+
+# Create the SQLAlchemy engine
+engine = create_engine(DATABASE_URL)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base = declarative_base()
+
+# Example model
+class User(Base):
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, index=True)
+
+# Create tables
+def create_tables():
+    Base.metadata.create_all(bind=engine)
