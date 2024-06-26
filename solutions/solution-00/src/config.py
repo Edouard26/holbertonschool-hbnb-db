@@ -16,7 +16,7 @@ class Config(ABC):
     Initial configuration settings
     This class should not be instantiated directly
     """
-
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
     DEBUG = False
     TESTING = False
 
@@ -75,7 +75,8 @@ class ProductionConfig(Config):
 
     TESTING = False
     DEBUG = False
-
+    app.config.from_object('config.DevelopmentConfig' if os.environ.get('ENV') == 'development' else 'config.ProductionConfig')
+    db = SQLAlchemy(app)
     SQLALCHEMY_DATABASE_URI = os.getenv(
         "DATABASE_URL",
         "postgresql://user:password@localhost/hbnb_prod"
