@@ -2,6 +2,7 @@
 
 from flask import Flask
 from flask_cors import CORS
+from flask_jwt_extended import JWTManager
 
 cors = CORS()
 
@@ -15,6 +16,8 @@ def create_app(config_class="src.config.DevelopmentConfig") -> Flask:
     app.url_map.strict_slashes = False
 
     app.config.from_object(config_class)
+    app.config['my_password'] = 'super-secret'
+    jwt = JWTManager(app)
 
     register_extensions(app)
     register_routes(app)
